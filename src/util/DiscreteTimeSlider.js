@@ -4,8 +4,8 @@ import Slider from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
 
 // https://github.com/mui-org/material-ui/blob/v5.4.0/docs/src/pages/components/slider/CustomizedSlider.js
-const PrettoSlider = styled(Slider)({
-  color: '#52af77',
+const PrettoSlider = styled(Slider)((props) => ({
+  color: props.mycolor || '#52af77',
   height: 8,
   '& .MuiSlider-track': {
     border: 'none',
@@ -30,7 +30,7 @@ const PrettoSlider = styled(Slider)({
     width: 32,
     height: 32,
     borderRadius: '50% 50% 50% 0',
-    backgroundColor: '#52af77',
+    backgroundColor: props.mycolor || '#52af77',
     transformOrigin: 'bottom left',
     transform: 'translate(50%, -100%) rotate(-45deg) scale(0)',
     '&:before': { display: 'none' },
@@ -41,7 +41,7 @@ const PrettoSlider = styled(Slider)({
       transform: 'rotate(45deg)',
     },
   },
-});
+}));
 
 const noop = () => {};
 
@@ -60,6 +60,7 @@ function DiscreteTimeSlider(props) {
     <Box sx={{ ...props.osx }} >
       <Box sx={{ ...props.isx }}>
         <PrettoSlider
+          mycolor={props.mycolor}
           key={props.key}
           defaultValue={props.defaultValue}
           // value={props.value}

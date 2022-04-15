@@ -1,8 +1,8 @@
 import React from 'react';
 import DeckGL from '@deck.gl/react';
 
-import {OrthographicView, COORDINATE_SYSTEM} from '@deck.gl/core';
-import {PointCloudLayer, ScatterplotLayer} from '@deck.gl/layers';
+import {COORDINATE_SYSTEM, OrthographicView} from '@deck.gl/core';
+import {ScatterplotLayer} from '@deck.gl/layers';
 import {DataFilterExtension} from '@deck.gl/extensions';
 
 import DiscreteTimeSlider from "./util/DiscreteTimeSlider";
@@ -14,7 +14,7 @@ const INITIAL_VIEW_STATE = {
 };
 
 // Data to be used by the LineLayer
-const data = Array(100000).fill()
+const data = Array(5000).fill()
   .map((x, index) => {
     return {
       "index": index,
@@ -22,6 +22,15 @@ const data = Array(100000).fill()
       "fillColor": [0,0,255, Math.floor(Math.random()*256)]
     }
   });
+
+// original data
+const og_data_color = '#bdbdbd';
+const accepted_data_color = '#52af77';
+
+// hypothesis support
+const hypothesis_color = '#034cf5';
+const hypothesis_support = '#52af77';
+const hypothesis_support_rejected = '#f50334';
 
 const view = new OrthographicView({id: '2d-scene', controller: true});
 
@@ -36,22 +45,52 @@ function App() {
   }
 
   const layers = [
-      new ScatterplotLayer({
-        id: 'my-layer',
-        data,
-        pickable: false,
-        coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
-        getRadius: 0.005,
-        getFillColor: d => d.fillColor,
+    // new ScatterplotLayer({
+    //   id: 'og-data',
+    //   data,
+    //   pickable: false,
+    //   coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
+    //   getRadius: 0.005,
+    //   getFillColor: d => d.fillColor,
+    //
+    //   // props added by DataFilterExtension
+    //   getFilterValue: d => d.index,
+    //   filterRange: filterRange,
+    //
+    //   // Define extensions
+    //   extensions: [new DataFilterExtension()]
+    // }),
+    // new ScatterplotLayer({
+    //   id: 'accepted-data',
+    //   data,
+    //   pickable: false,
+    //   coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
+    //   getRadius: 0.005,
+    //   getFillColor: d => d.fillColor,
+    //
+    //   // props added by DataFilterExtension
+    //   getFilterValue: d => d.index,
+    //   filterRange: filterRange,
+    //
+    //   // Define extensions
+    //   extensions: [new DataFilterExtension()]
+    // }),
+    new ScatterplotLayer({
+      id: 'rni-hypothesis',
+      data,
+      pickable: false,
+      coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
+      getRadius: 0.005,
+      getFillColor: d => d.fillColor,
 
-        // props added by DataFilterExtension
-        getFilterValue: d => d.index,
-        filterRange: filterRange,
+      // props added by DataFilterExtension
+      getFilterValue: d => d.index,
+      filterRange: filterRange,
 
-        // Define extensions
-        extensions: [new DataFilterExtension()]
-      })
-    ];
+      // Define extensions
+      extensions: [new DataFilterExtension()]
+    })
+  ];
 
 
   const osx = {
@@ -76,7 +115,7 @@ function App() {
         layers={layers}
       />
 
-      <DiscreteTimeSlider osx={osx} isx={isx} onChange={handleTimeSliderChange} max={max}/>
+      <DiscreteTimeSlider mycolor={hypothesis_color} osx={osx} isx={isx} onChange={handleTimeSliderChange} max={max}/>
 
     </React.Fragment>
   )
